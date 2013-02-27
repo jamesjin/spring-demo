@@ -1,0 +1,53 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+version = '1.0.0'
+
+mainClassName = 'com.darcytech.demo.Main'
+
+dependencies {
+    compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'commons-io:commons-io:2.4'
+    compile 'commons-collections:commons-collections:3.2.1'
+    compile 'commons-fileupload:commons-fileupload:1.2.2'
+    compile 'commons-daemon:commons-daemon:1.0.13'
+    compile 'org.slf4j:slf4j-api:1.7.2'
+    runtime 'ch.qos.logback:logback-classic:1.0.9'
+    runtime 'ch.qos.logback:logback-core:1.0.9'
+}
+
+sourceSets {
+    integrationTest
+    all {
+        println name + ':' + allSource.srcDirs
+    }
+}
+
+configurations.all {
+    println name
+}
+
+
+tasks.addRule("Pattern: ping<ID>") { String taskName ->
+    println 'rule is executed.'
+    if (taskName.startsWith("ping")) {
+        task(taskName) << {
+            println "Pinging: " + (taskName - 'ping')
+        }
+    }
+}
+
+task hello << {
+    println 'Hello world!'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.4'
+}
